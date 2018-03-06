@@ -18,6 +18,70 @@ class MainController: UITableViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "pencil"), style: .plain, target: self, action: #selector(handleNewMessage))
         
         checkIfUserIsLoggedIn()
+        
+        observeMessages()
+    }
+    
+    let cellId = "cellId"
+    var messages = [Messages]()
+    
+    func observeMessages(){
+        let ref = Database.database().reference().child("messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            //print(snapshot)
+            
+            if let value = snapshot.value as? NSDictionary{
+                let message = Messages()
+                let fromId = value["fromId"] as? String ?? "fromId not found"
+                let text = value["text"] as? String ?? "text not found"
+                let timestamp = value["timestamp"] as? String ?? "ts not found"
+                let toId = value["toId"] as? String ?? "toId not found"
+                
+                message.fromId = fromId
+                message.text = text
+                message.timestamp = timestamp
+                message.toId = toId
+            
+                self.messages.append(message)
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+    
+            }
+            
+            
+            
+        }, withCancel: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+        
+        //let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        
+        let message = messages[indexPath.row]
+        var ref: DatabaseReference!
+        
+        ref = Database.database().reference()
+        
+        let query = ref.child("users").child(message.toId!)
+        
+        query.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            let value = snapshot.value as? NSDictionary
+            let username = value?["username"] as? String ?? ""
+            cell.textLabel?.text  = username
+        }, withCancel: nil)
+        
+    
+        cell.detailTextLabel?.text = message.text
+        
+        return cell
     }
     
     func checkIfUserIsLoggedIn(){
@@ -45,9 +109,11 @@ class MainController: UITableViewController {
                 let username = value["username"] as? String ?? "name not found"
                 let email = value["email"] as? String ?? "email not found"
                 let profileImageURL = value["profileImageURL"] as? String ?? "https://firebasestorage.googleapis.com/v0/b/coded-login-page.appspot.com/o/profile_images%2FnoPhotoSelected.png?alt=media&token=2d5dd0b9-ce8a-4e9e-9d9a-1981d4b13913"
+
                 user.username = username
                 user.email = email
                 user.profileImageURL = profileImageURL
+                user.id = userID
             
                 self.setupNavBarWithUSer(user: user)
             }
@@ -100,14 +166,15 @@ class MainController: UITableViewController {
         container.centerXAnchor.constraint(equalTo: titleView.centerXAnchor).isActive = true
         container.centerYAnchor.constraint(equalTo: titleView.centerYAnchor).isActive = true
         
-        titleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatController)))
-        
     }
     
-    @objc func showChatController(){
+    @objc func showChatControllerForUser(user: User){
         let chatLogController = ChatLogController()
+        
+        chatLogController.user = user
         navigationController?.pushViewController(chatLogController, animated: true)
-        print(123)
+        
+        
         
     }
     
@@ -115,6 +182,7 @@ class MainController: UITableViewController {
     @objc func handleNewMessage(){
         
         let newMessageController = NewMessageController()
+        newMessageController.messageController = self
         let navController = UINavigationController(rootViewController: newMessageController)
         present(navController, animated: true, completion: nil)
         

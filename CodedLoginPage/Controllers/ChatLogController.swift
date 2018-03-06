@@ -8,9 +8,15 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class ChatLogController: UIViewController, UITextFieldDelegate {
     
+    var user: User?{
+        didSet{
+            navigationItem.title = user?.username
+        }
+    }
     
     lazy var inputTextField: UITextField = {
         let inputTextField = UITextField()
@@ -24,7 +30,6 @@ class ChatLogController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Chat Log Controller"
         view.backgroundColor = .white
         
         setupInputComponents()
@@ -83,7 +88,19 @@ class ChatLogController: UIViewController, UITextFieldDelegate {
     
     @objc func handleSendMessage(){
         let ref = Database.database().reference(fromURL: "https://coded-login-page.firebaseio.com/")
-        let values = ["text" : inputTextField.text!]
+        let toId = user!.id!
+        let fromId = Auth.auth().currentUser!.uid
+        
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let timestamp = formatter.string(from: now)
+        
+        
+        
+        
+        let values = ["text" : inputTextField.text!, "toId": toId, "fromId": fromId, "timestamp": timestamp]
         ref.child("messages").childByAutoId().updateChildValues(values)
     }
     

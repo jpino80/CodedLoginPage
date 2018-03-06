@@ -13,5 +13,6 @@ class User: NSObject {
     var username: String? = nil
     var email: String? = nil
     var profileImageURL: String? = nil
+    var id: String? = nil
     
 }
