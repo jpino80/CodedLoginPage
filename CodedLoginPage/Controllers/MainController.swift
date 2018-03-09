@@ -11,21 +11,29 @@ import Firebase
 
 class MainController: UITableViewController {
 
+    let cellId = "cellId"
+    var messages = [Messages]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "pencil"), style: .plain, target: self, action: #selector(handleNewMessage))
         
+        tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
+        
         checkIfUserIsLoggedIn()
         
         observeMessages()
     }
     
-    let cellId = "cellId"
-    var messages = [Messages]()
+
     
     func observeMessages(){
+        
+        let currentUser = Auth.auth().currentUser?.uid
+        
+        
         let ref = Database.database().reference().child("messages")
         ref.observe(.childAdded, with: { (snapshot) in
             //print(snapshot)
@@ -34,7 +42,7 @@ class MainController: UITableViewController {
                 let message = Messages()
                 let fromId = value["fromId"] as? String ?? "fromId not found"
                 let text = value["text"] as? String ?? "text not found"
-                let timestamp = value["timestamp"] as? String ?? "ts not found"
+                let timestamp = value["timestamp"] as? NSNumber ?? 0
                 let toId = value["toId"] as? String ?? "toId not found"
                 
                 message.fromId = fromId
@@ -60,28 +68,20 @@ class MainController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+        //let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
         
-        //let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
         
         let message = messages[indexPath.row]
-        var ref: DatabaseReference!
+
+        cell.message = message
         
-        ref = Database.database().reference()
-        
-        let query = ref.child("users").child(message.toId!)
-        
-        query.observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            let value = snapshot.value as? NSDictionary
-            let username = value?["username"] as? String ?? ""
-            cell.textLabel?.text  = username
-        }, withCancel: nil)
-        
-    
-        cell.detailTextLabel?.text = message.text
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72
     }
     
     func checkIfUserIsLoggedIn(){

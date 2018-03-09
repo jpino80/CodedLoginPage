@@ -13,6 +13,7 @@
 		4697DE8F2045E5D200A89A70 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4697DE8E2045E5D200A89A70 /* Extensions.swift */; };
 		4697DE912048A1EF00A89A70 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4697DE902048A1EF00A89A70 /* ChatLogController.swift */; };
 		46E09787204F40620085D2FE /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E09786204F40620085D2FE /* Messages.swift */; };
+		46E0978A2050A4970085D2FE /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E097892050A4970085D2FE /* UserCell.swift */; };
 		46F47039203E225A00303285 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F47037203DF8EA00303285 /* MainController.swift */; };
 		46F4703B203E2BED00303285 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 46F4703A203E2BEC00303285 /* GoogleService-Info.plist */; };
 		46F94C50203CE1D6007CABB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F94C4F203CE1D6007CABB8 /* AppDelegate.swift */; };
@@ -32,6 +33,7 @@
 		4697DE8E2045E5D200A89A70 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4697DE902048A1EF00A89A70 /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		46E09786204F40620085D2FE /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		46E097892050A4970085D2FE /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		46F47037203DF8EA00303285 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		46F4703A203E2BEC00303285 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46F94C4C203CE1D6007CABB8 /* CodedLoginPage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CodedLoginPage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +75,14 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		46E097882050A47C0085D2FE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				46E097892050A4970085D2FE /* UserCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		46F47036203DF8A100303285 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +116,7 @@
 		46F94C4E203CE1D6007CABB8 /* CodedLoginPage */ = {
 			isa = PBXGroup;
 			children = (
+				46E097882050A47C0085D2FE /* View */,
 				46F94C4F203CE1D6007CABB8 /* AppDelegate.swift */,
 				4697DE8D2045E5B300A89A70 /* Helpers */,
 				4697DE8820447A0B00A89A70 /* Model */,
@@ -280,6 +291,7 @@
 				46F47039203E225A00303285 /* MainController.swift in Sources */,
 				4697DE8A20447A2900A89A70 /* User.swift in Sources */,
 				46F94C50203CE1D6007CABB8 /* AppDelegate.swift in Sources */,
+				46E0978A2050A4970085D2FE /* UserCell.swift in Sources */,
 				4697DE8F2045E5D200A89A70 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

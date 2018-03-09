@@ -91,16 +91,16 @@ class ChatLogController: UIViewController, UITextFieldDelegate {
         let toId = user!.id!
         let fromId = Auth.auth().currentUser!.uid
         
-        let now = Date()
+        let now = Date().timeIntervalSince1970
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        let timestamp = formatter.string(from: now)
+        //let timestamp = formatter.string(from: now)
         
+        let timestamp = Int(now)
+    
         
-        
-        
-        let values = ["text" : inputTextField.text!, "toId": toId, "fromId": fromId, "timestamp": timestamp]
+	    let values = ["text" : inputTextField.text!, "toId": toId, "fromId": fromId, "timestamp": timestamp] as [String : Any]
         ref.child("messages").childByAutoId().updateChildValues(values)
     }
     

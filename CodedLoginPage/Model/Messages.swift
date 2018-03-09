@@ -12,7 +12,7 @@ class Messages: NSObject {
 
     var fromId: String? = nil
     var text: String? = nil
-    var timestamp: String?  = nil
+    var timestamp: NSNumber?  = nil
     var toId: String?  = nil
     
 }
